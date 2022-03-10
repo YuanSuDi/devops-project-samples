@@ -1,32 +1,14 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
-- master
-
-pool:
-  vmImage: 'windows-latest'
-
-variables:
-  solution: 'dotnet/aspnet/webapp/Application/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+- master # or the name of your main branch
+- feature/*
 
 steps:
-- task: NuGetToolInstaller@1
-
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
-
 # Prepare Analysis Configuration task
 - task: SonarQubePrepare@5
   inputs:
-    SonarQube: http://tong1995.iok.la
+    SonarQube: 'http://tong1995.iok.la'
     scannerMode: 'MSBuild'
-    projectKey: Space_Game_-_web_Space_Game_-_web
+    projectKey: 'Space_Game_-_web_Space_Game_-_web'
 
 # Run Code Analysis task
 - task: SonarQubeAnalyze@5
@@ -35,15 +17,3 @@ steps:
 - task: SonarQubePublish@5
   inputs:
     pollingTimeoutSec: '300'
-
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
