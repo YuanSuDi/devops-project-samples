@@ -6,9 +6,10 @@ steps:
 # Prepare Analysis Configuration task
 - task: SonarQubePrepare@5
   inputs:
-    SonarQube: 'http://tong1995.iok.la'
+    SonarQube: 'testSonarQube'
     scannerMode: 'MSBuild'
     projectKey: 'Space_Game_-_web_Space_Game_-_web'
+    projectName: 'testSonar'
 
 # Run Code Analysis task
 - task: SonarQubeAnalyze@5
